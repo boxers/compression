@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.util.Scanner;
 
@@ -10,6 +9,7 @@ public class Compression {
     static KHeap heap = new KHeap(2);
     static Node trie;
     
+    //gets the frequency of characters
     public static void getFreq(String s) throws IOException{
         FileReader reader = new FileReader(s);
         int nchar = 0;
@@ -94,6 +94,8 @@ public class Compression {
         }
         return t;
     }
+
+    //0th order compression
     public static void oCompress(String s, String n) throws IOException{
         getFreq(s);
         hEncode();
@@ -117,6 +119,8 @@ public class Compression {
         pw.close();
         fr.close();
     }
+
+    //0th order decompression
     public static void decompress(String s, String n) throws IOException{
         //We're supposed to read bits...
         FileReader fr = new FileReader(s);
@@ -145,6 +149,8 @@ public class Compression {
         fr.close();
     }
     
+
+    //main method
     public static void main(String[] args) {
         try{
             //just the basic setup for testing
