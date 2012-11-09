@@ -106,6 +106,9 @@ public class Compression {
         PrintWriter pw = new PrintWriter(bw);
         FileReader fr = new FileReader(s);
         
+        FileOutputStream fos = new FileOutputStream(n+".key");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+
         int nchar = 0;
         while((nchar = fr.read()) != -1){
             char c = (char)nchar;
@@ -116,17 +119,27 @@ public class Compression {
                 pw.write(enc[26]);
             }
         }
+        //we save the encoding trie here
+        oos.writeObject(trie);
+
         pw.close();
         fr.close();
+        oos.close();
     }
 
     //0th order decompression
-    public static void decompress(String s, String n) throws IOException{
+    public static void decompress(String s, String n) throws IOException,ClassNotFoundException{
         //We're supposed to read bits...
         FileReader fr = new FileReader(s);
         FileWriter fw = new FileWriter(n+"2.txt");
         BufferedWriter bw = new BufferedWriter(fw);
         PrintWriter pw = new PrintWriter(bw);
+
+        FileInputStream fis = new FileInputStream(n+".key");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object encodingTrie = ois.readObject();
+        trie = (Node)encodingTrie;
+
         int nchar = 0;
         Node trav = trie;
         while((nchar = fr.read()) != -1){
@@ -147,6 +160,7 @@ public class Compression {
         }
         pw.close();
         fr.close();
+        ois.close();
     }
     
 
@@ -163,7 +177,7 @@ public class Compression {
             String ext = "";
             if (processInput.length > 1)
                 ext = processInput[1];
-            if(ext.equals(".bz")){
+            if(ext.equals("bz")){
                 //decompress using 0th order trie
                 decompress(input,name);
             }
@@ -171,7 +185,6 @@ public class Compression {
                 //compress using 0th order
                 oCompress(input,name);
             }
-            decompress(name+".bz",name);
         }
         catch(Exception ex){
             ex.printStackTrace();
