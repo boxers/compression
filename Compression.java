@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.util.Scanner;
 
@@ -23,6 +22,7 @@ public class Compression {
         }
     }
     
+    //hEncode() creates the encoding trie
     public static void hEncode(){
         //loading heap with distict characters and their frequency
         for(int i = 0; i < freq.length; i++){
@@ -48,6 +48,7 @@ public class Compression {
         trie = heap.extract_min();
     }
     
+    //encodeO creates the codes for the characters for 0th Order Compression
     static public void encodeO(Node x){
         if (x == null)
             return;
